@@ -101,12 +101,6 @@
 							visibility_off
 						</span>
 					</div>
-					<div class="form-check mb-3">
-						<input class="form-check-input" type="checkbox" required />
-						<label class="form-check-label" for="defaultCheck1">
-							даю согласие на обработку персональных данных
-						</label>
-					</div>
 					<p id="info" style="color: blueviolet"></p>
 					<input
 						type="submit"
@@ -124,12 +118,11 @@
 				method: "POST",
 				body: new FormData(form),
 			});
-			/* console.log(await response.text()); */
 			let result = await response.text();
 			if (result == "ok") {
-				alert(result);
+				alert("Вы авторизованы!");
 			} else if (result == "exist") {
-				info.innerText = "такой пользователь уже есть"
+				info.innerText = "Такого пользователя нет"
 			}
 		}
 	</script>

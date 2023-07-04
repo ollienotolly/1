@@ -1,24 +1,29 @@
 <?php
-
-$mysqli = mysqli_connect("localhost", "oqpnhpwx_basa2", "123456", "oqpnhpwx_basa2");
+session_start();
+$mysqli = mysqli_connect("localhost", "oqpnhpwx_bd-1", "arolp", "oqpnhpwx_bd-1");
 
 if ($mysqli == false) {
   print("error");
 } else {
-/* print("Соединение установлено успешно"); */
 
-  $name = $_POST["name"];
-  $lastname = $_POST["lastname"];
-  $email = $_POST["email"];
-  $pass = $_POST["pass"];
+  $email = trim(mb_strtolower($_POST["email"]));
+  $pass = trim($_POST["pass"]);
+/*   $pass = password_hash($pass, PASSWORD_DEFAULT); */
 
-  $result = $mysqli->query("SELECT * FROM `basa2` WHERE `email`='$email'");
-  //var_dump($result->num_rows);
-  if ($result->num_rows != 0) {
-    print("exist"); //Такой пользователь существует
+  $result = $mysqli->query("SELECT * FROM `basa1` WHERE `email`='$email'");
+  $result = $result->fetch_assoc();
+  $pass_hash = $result["pass"];
+/*   var_dump($result); */
+
+  if (password_verify($pass, $pass_hash)) {
+    echo "sucsess";
+    $_SESSION["id"] = $result["id"];
+    $_SESSION["name"] = $result["name"];
+    $_SESSION["lastname"] = $result["lastname"];
+    $_SESSION["email"] = $result["email"];
   } else {
-    print("ok"); //Такого пользователя не существует, можно регистрировать
-    $mysqli->query("INSERT INTO `basa2`(`name`, `lastname`, `email`, `pass`) VALUES ('$name', '$lastname', '$email', '$pass')");
+    echo "rejected";
+    
   }
 }
 
